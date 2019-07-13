@@ -6,15 +6,21 @@
 package net.guides.springboot2.springboot2jpacrudexample.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  *
@@ -37,11 +43,40 @@ public class Materiel implements Serializable {
     @Column(name = "pu_materiel")
     private Double puMateriel;
 
+    @JsonIgnore
+    @Lob
+    @Column(name = "image")
+    private Byte[] image;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "materiel", cascade = CascadeType.ALL)
+    private List<Stock> stocks;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "materiel", cascade = CascadeType.ALL)
+    private List<Location> locations;
+
     public Materiel() {
     }
 
     public Materiel(Integer refMateriel) {
         this.refMateriel = refMateriel;
+    }
+
+    public List<Stock> getStocks(){
+        return stocks;
+    }
+
+    public void setStocks(List<Stock> stocks){
+        this.stocks = stocks;
+    }
+
+    public List<Location> getLocations(){
+        return locations;
+    }
+
+    public void setLocations(List<Location> locations){
+        this.locations = locations;
     }
 
     public Integer getRefMateriel() {
@@ -67,6 +102,17 @@ public class Materiel implements Serializable {
     public void setPuMateriel(Double puMateriel) {
         this.puMateriel = puMateriel;
     }
+
+    public Byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(Byte[] image) {
+        this.image = image;
+    }
+
+    
+    
 
    
     

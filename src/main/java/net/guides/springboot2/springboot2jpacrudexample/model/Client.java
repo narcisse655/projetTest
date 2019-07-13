@@ -18,6 +18,8 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  *
  * @author Nas
@@ -45,6 +47,7 @@ public class Client implements Serializable {
     @Column(name = "ville_client")
     private String villeClient;
     @OneToMany(mappedBy = "numClient")
+    @JsonIgnore
     private List<Contrat> contratList;
 
     public Client() {

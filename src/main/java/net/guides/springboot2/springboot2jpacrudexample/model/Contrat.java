@@ -8,6 +8,7 @@ package net.guides.springboot2.springboot2jpacrudexample.model;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,14 +18,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  *
@@ -55,12 +54,25 @@ public class Contrat implements Serializable {
     @ManyToOne
     private Client numClient;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "contrat", cascade = CascadeType.ALL)
+    private List<Location> locations;
+
     public Contrat() {
     }
 
     public Contrat(Integer numContrat) {
         this.numContrat = numContrat;
     }
+
+    public List<Location> getLocations(){
+        return locations;
+    }
+
+    public void setLocations(List<Location> locations){
+        this.locations = locations;
+    }
+
 
     public Integer getNumContrat() {
         return numContrat;

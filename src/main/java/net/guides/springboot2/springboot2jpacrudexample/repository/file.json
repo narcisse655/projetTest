@@ -1,0 +1,164 @@
+[
+    {
+        "locationId": 55,
+        "qteLiv": 50,
+        "contrat": {
+            "numContrat": 1,
+            "dateContrat": "2019-08-08",
+            "dureeContrat": 10,
+            "montant": 75000,
+            "numAgence": {
+                "numAgence": 2,
+                "nomAgence": "agence02"
+            },
+            "numClient": {
+                "numClient": 3,
+                "nomClient": "Wamba charles",
+                "telClient": "8081",
+                "emailClient": "wamba@yahoo.fr",
+                "villeClient": "Edéa"
+            }
+        },
+        "materiel": {
+            "refMateriel": 4,
+            "designMateriel": "Pousse",
+            "puMateriel": 300,
+            "photoMateriel": null
+        }
+    },
+    {
+        "locationId": 56,
+        "qteLiv": 45,
+        "contrat": {
+            "numContrat": 1,
+            "dateContrat": "2019-08-08",
+            "dureeContrat": 10,
+            "montant": 75000,
+            "numAgence": {
+                "numAgence": 2,
+                "nomAgence": "agence02"
+            },
+            "numClient": {
+                "numClient": 3,
+                "nomClient": "Wamba charles",
+                "telClient": "8081",
+                "emailClient": "wamba@yahoo.fr",
+                "villeClient": "Edéa"
+            }
+        },
+        "materiel": {
+            "refMateriel": 3,
+            "designMateriel": "Machette",
+            "puMateriel": 250,
+            "photoMateriel": null
+        }
+    },
+    {
+        "locationId": 57,
+        "qteLiv": 42,
+        "contrat": {
+            "numContrat": 1,
+            "dateContrat": "2019-08-08",
+            "dureeContrat": 10,
+            "montant": 75000,
+            "numAgence": {
+                "numAgence": 2,
+                "nomAgence": "agence02"
+            },
+            "numClient": {
+                "numClient": 3,
+                "nomClient": "Wamba charles",
+                "telClient": "8081",
+                "emailClient": "wamba@yahoo.fr",
+                "villeClient": "Edéa"
+            }
+        },
+        "materiel": {
+            "refMateriel": 2,
+            "designMateriel": "Bourette",
+            "puMateriel": 300,
+            "photoMateriel": null
+        }
+    },
+    {
+        "locationId": 58,
+        "qteLiv": 30,
+        "contrat": {
+            "numContrat": 1,
+            "dateContrat": "2019-08-08",
+            "dureeContrat": 10,
+            "montant": 75000,
+            "numAgence": {
+                "numAgence": 2,
+                "nomAgence": "agence02"
+            },
+            "numClient": {
+                "numClient": 3,
+                "nomClient": "Wamba charles",
+                "telClient": "8081",
+                "emailClient": "wamba@yahoo.fr",
+                "villeClient": "Edéa"
+            }
+        },
+        "materiel": {
+            "refMateriel": 1,
+            "designMateriel": "Groupe électrogène",
+            "puMateriel": 30000,
+            "photoMateriel": null
+        }
+    },
+    {
+        "locationId": 59,
+        "qteLiv": 5,
+        "contrat": {
+            "numContrat": 3,
+            "dateContrat": "2019-07-19",
+            "dureeContrat": 5,
+            "montant": 15000,
+            "numAgence": {
+                "numAgence": 1,
+                "nomAgence": "agence01"
+            },
+            "numClient": {
+                "numClient": 5,
+                "nomClient": "PANGOP cyrille",
+                "telClient": "680765678",
+                "emailClient": "pangop@yahoo.fr",
+                "villeClient": "Yaoundé"
+            }
+        },
+        "materiel": {
+            "refMateriel": 2,
+            "designMateriel": "Bourette",
+            "puMateriel": 300,
+            "photoMateriel": null
+        }
+    },
+    {
+        "locationId": 60,
+        "qteLiv": 10,
+        "contrat": {
+            "numContrat": 3,
+            "dateContrat": "2019-07-19",
+            "dureeContrat": 5,
+            "montant": 15000,
+            "numAgence": {
+                "numAgence": 1,
+                "nomAgence": "agence01"
+            },
+            "numClient": {
+                "numClient": 5,
+                "nomClient": "PANGOP cyrille",
+                "telClient": "680765678",
+                "emailClient": "pangop@yahoo.fr",
+                "villeClient": "Yaoundé"
+            }
+        },
+        "materiel": {
+            "refMateriel": 1,
+            "designMateriel": "Groupe électrogène",
+            "puMateriel": 30000,
+            "photoMateriel": null
+        }
+    }
+]
