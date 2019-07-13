@@ -1,17 +1,13 @@
 package net.guides.springboot2.springboot2jpacrudexample.controller;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,9 +24,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import net.guides.springboot2.springboot2jpacrudexample.exception.ResourceNotFoundException;
-import net.guides.springboot2.springboot2jpacrudexample.model.*;
+import net.guides.springboot2.springboot2jpacrudexample.model.Materiel;
 import net.guides.springboot2.springboot2jpacrudexample.payload.UploadFileResponse;
-import net.guides.springboot2.springboot2jpacrudexample.repository.*;
+import net.guides.springboot2.springboot2jpacrudexample.repository.DBFileStorageService;
+import net.guides.springboot2.springboot2jpacrudexample.repository.MaterielRepository;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
