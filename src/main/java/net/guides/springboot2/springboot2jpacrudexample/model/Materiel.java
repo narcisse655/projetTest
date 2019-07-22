@@ -43,11 +43,14 @@ public class Materiel implements Serializable {
     @Column(name = "pu_materiel")
     private Double puMateriel;
 
-    @JsonIgnore
+    @Column(name="file_id")
+    private String fileId;
+
+    /* @JsonIgnore
     @Lob
     @Column(name = "image")
     private Byte[] image;
-
+ */
     @JsonIgnore
     @OneToMany(mappedBy = "materiel", cascade = CascadeType.ALL)
     private List<Stock> stocks;
@@ -103,13 +106,15 @@ public class Materiel implements Serializable {
         this.puMateriel = puMateriel;
     }
 
-    public Byte[] getImage() {
-        return image;
+    public String getFileId() {
+        return fileId;
     }
 
-    public void setImage(Byte[] image) {
-        this.image = image;
+    public void setFileId(String fileId) {
+        this.fileId = fileId;
     }
+
+    
 
     
     

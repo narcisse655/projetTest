@@ -27,7 +27,8 @@ public class DBFileStorageService {
     @Autowired
     private MaterielRepository materielRepository;
 
-    public DBFile storeFile(MultipartFile file) {
+    @Transactional
+    public DBFile storeFile(int materielId, MultipartFile file) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
 
@@ -38,15 +39,20 @@ public class DBFileStorageService {
             }
 
             DBFile dbFile = new DBFile(fileName, file.getContentType(), file.getBytes());
-
-            return dbFileRepository.save(dbFile);
+            DBFile dbf = dbFileRepository.save(dbFile);
+            Materiel materiel = materielRepository.findById(materielId).get();
+            materiel.setFileId(dbf.getId());
+            materielRepository.save(materiel);
+            return dbf;
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
     }
 
 
-    public DBFile getFile(String fileId) {
+    public DBFile getFile(int materielId) {
+        Materiel materiel = materielRepository.findById(materielId).get();
+        String fileId = materiel.getFileId();
         return dbFileRepository.findById(fileId)
                 .orElseThrow(() -> new MyFileNotFoundException("File not found with id " + fileId));
     }
@@ -57,7 +63,7 @@ public class DBFileStorageService {
 
     The service basically copies the image content to a byte array, and finally 
     you assign this byte array to your entity. 
-    */
+   
     @Transactional
     public String saveImageFile(int materielId, MultipartFile file) {
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -93,30 +99,40 @@ public class DBFileStorageService {
     }
         return fileName;
 
-    }
+    }*/
 
-    public void renderImageFromDB(int id, HttpServletResponse response)
-            throws IOException, ResourceNotFoundException {
+    public void renderImageFromDB(int id, HttpServletResponse response){
 
-        Materiel materiel  = materielRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Materiel not found for "+
-        "this id :: " + id));
+        Materiel materiel = null;
+        try {
+            materiel = materielRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Materiel not found for " + "this id :: " + id));
+        } catch (ResourceNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
-		if(materiel != null){
+        DBFile dbf = dbFileRepository.findById(materiel.getFileId()).get();
 
-
-			byte[] byteArray = new byte[materiel.getImage().length];
+		if((materiel != null && dbf != null) && (materiel.getFileId().equals(dbf.getId()))){
+            
+			byte[] byteArray = new byte[dbf.getData().length];
 			int i= 0;
 
-			for(Byte wrappedByte : materiel.getImage() ){
+			for(Byte wrappedByte : dbf.getData() ){
 				byteArray[i++] = wrappedByte;
             }
             
-			response.setContentType("image/jpeg");
+			response.setContentType(dbf.getFileType());
 			InputStream is = new ByteArrayInputStream(byteArray);
-			IOUtils.copy(is,response.getOutputStream());
+			try {
+                IOUtils.copy(is, response.getOutputStream());
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
 		}
 
-	}
+	} 
 }

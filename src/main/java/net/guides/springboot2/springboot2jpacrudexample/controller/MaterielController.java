@@ -9,6 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -23,20 +27,25 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import net.guides.springboot2.springboot2jpacrudexample.exception.MyFileNotFoundException;
 import net.guides.springboot2.springboot2jpacrudexample.exception.ResourceNotFoundException;
+import net.guides.springboot2.springboot2jpacrudexample.model.DBFile;
 import net.guides.springboot2.springboot2jpacrudexample.model.Materiel;
 import net.guides.springboot2.springboot2jpacrudexample.payload.UploadFileResponse;
+import net.guides.springboot2.springboot2jpacrudexample.repository.DBFileRepository;
 import net.guides.springboot2.springboot2jpacrudexample.repository.DBFileStorageService;
 import net.guides.springboot2.springboot2jpacrudexample.repository.MaterielRepository;
 
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
+//@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/v1")
 public class MaterielController {
     @Autowired
     private MaterielRepository materielRepository;
     @Autowired
-    private DBFileStorageService DBFileStorageService;
+    private DBFileRepository dbFileRepository;
+    @Autowired
+    private DBFileStorageService dbFileStorageService;
 
     @GetMapping("/materiels")
     public List<Materiel> getAllMateriels() {
@@ -63,7 +72,7 @@ public class MaterielController {
         Materiel materiel = materielRepository.findById(refMateriel)
                 .orElseThrow(() -> new ResourceNotFoundException("Materiel not found for this id :: " + refMateriel));
         materiel.setDesignMateriel(materielDetails.getDesignMateriel());
-        materiel.setImage(materielDetails.getImage());
+        materiel.setFileId(materielDetails.getFileId());
         materiel.setPuMateriel(materielDetails.getPuMateriel());
         final Materiel updatedMateriel = materielRepository.save(materiel);
         return ResponseEntity.ok(updatedMateriel);
@@ -85,19 +94,39 @@ public class MaterielController {
     public UploadFileResponse saveImageMateriel(@PathVariable(value = "id") int id,
             @RequestParam("file") MultipartFile file) {
 
-        String fileName = DBFileStorageService.saveImageFile(id, file);
+                DBFile dbFile = dbFileStorageService.storeFile(id, file);
 
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/downloadFile/")
-                .path(fileName).toUriString();
-
-        return new UploadFileResponse(fileName, fileDownloadUri, file.getContentType(), file.getSize());
+                String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                        .path("/api/v1/materiels/")
+                        .path(String.valueOf(id))
+                        .path("/image-materiel")
+                        //.path(dbFile.getId())
+                        .toUriString();
+        
+                return new UploadFileResponse(dbFile.getFileName(), fileDownloadUri,
+                        file.getContentType(), file.getSize());
+        
     }
 
-    @GetMapping("materiels/{id}/imagemateriel")
-    public void renderImageMateriel(@PathVariable(value = "id") int id,
-     HttpServletResponse response) throws IOException, ResourceNotFoundException {
+    
+    @GetMapping("/materiels/{id}/imagemateriel")
+    public void downloadFile(@PathVariable(value = "id") int id, 
+    HttpServletResponse response){
+        // Load file from database
+        dbFileStorageService.renderImageFromDB(id, response);
+       /*  return ResponseEntity.ok()
+        .contentType(MediaType.parseMediaType(dbFile.getFileType()))
+        .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\"" + dbFile.getFileName() + "\"")
+        .body(new ByteArrayResource(dbFile.getData())); */
+    }
 
-        DBFileStorageService.renderImageFromDB(id, response);        
-
-	}
+   /*  @GetMapping("/materiels/{id}/imagemateriel")
+    public ResponseEntity<Resource> downloadFile(@PathVariable(value="id") int id) {
+        // Load file from database
+        DBFile dbFile = dbFileStorageService.getFile(id);
+        return ResponseEntity.ok()
+        .contentType(MediaType.parseMediaType(dbFile.getFileType()))
+        .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\"" + dbFile.getFileName() + "\"")
+        .body(new ByteArrayResource(dbFile.getData()));
+    } */
 }

@@ -32,7 +32,7 @@ public class FileController {
     @Autowired
     private DBFileStorageService DBFileStorageService;
 
-    @PostMapping("/uploadFile")
+    /* @PostMapping("/uploadFile")
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
         DBFile dbFile = DBFileStorageService.storeFile(file);
 
@@ -43,17 +43,31 @@ public class FileController {
 
         return new UploadFileResponse(dbFile.getFileName(), fileDownloadUri,
                 file.getContentType(), file.getSize());
+    } */
+
+    @PostMapping("/uploadFile")
+    public UploadFileResponse uploadFile(@PathVariable(value="materielId") int materielId, 
+    @RequestParam("file") MultipartFile file) {
+        DBFile dbFile = DBFileStorageService.storeFile(materielId, file);
+
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloadFile/")
+                .path(dbFile.getId())
+                .toUriString();
+
+        return new UploadFileResponse(dbFile.getFileName(), fileDownloadUri,
+                file.getContentType(), file.getSize());
     }
 
-    @PostMapping("/uploadMultipleFiles")
+    /* @PostMapping("/uploadMultipleFiles")
     public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
         return Arrays.asList(files)
                 .stream()
                 .map(file -> uploadFile(file))
                 .collect(Collectors.toList());
-    }
+    } */
 
-    @GetMapping("/downloadFile/{fileId}")
+    /* @GetMapping("/downloadFile/{fileId}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileId) {
         // Load file from database
         DBFile dbFile = DBFileStorageService.getFile(fileId);
@@ -62,7 +76,7 @@ public class FileController {
                 .contentType(MediaType.parseMediaType(dbFile.getFileType()))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + dbFile.getFileName() + "\"")
                 .body(new ByteArrayResource(dbFile.getData()));
-    }
+    } */
 
 	
 
