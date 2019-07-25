@@ -90,7 +90,7 @@ public class MaterielController {
         return response;
     }
 
-    @PostMapping("/materiels/{id}/image")
+     /*  @PostMapping("/materiels/{id}/image")
     public UploadFileResponse saveImageMateriel(@PathVariable(value = "id") int id,
             @RequestParam("file") MultipartFile file) {
 
@@ -106,27 +106,50 @@ public class MaterielController {
                 return new UploadFileResponse(dbFile.getFileName(), fileDownloadUri,
                         file.getContentType(), file.getSize());
         
+    } */
+
+    /* @PostMapping("/uploadFile")
+    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
+        DBFile dbFile = dbFileStorageService.storeFile(file);
+
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/downloadFile/")
+                .path(dbFile.getId())
+                .toUriString();
+
+        return new UploadFileResponse(dbFile.getFileName(), fileDownloadUri,
+                file.getContentType(), file.getSize());
+    } */
+
+    @PostMapping("/materiels/uploadFile")
+    public DBFile uploadFile(@RequestParam("file") MultipartFile file) {
+        DBFile dbFile = dbFileStorageService.storeFile(file);
+        return dbFile;
     }
 
+
     
-    @GetMapping("/materiels/{id}/imagemateriel")
+   /*  @GetMapping("/materiels/{id}/imagemateriel")
     public void downloadFile(@PathVariable(value = "id") int id, 
     HttpServletResponse response){
         // Load file from database
         dbFileStorageService.renderImageFromDB(id, response);
-       /*  return ResponseEntity.ok()
-        .contentType(MediaType.parseMediaType(dbFile.getFileType()))
-        .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\"" + dbFile.getFileName() + "\"")
-        .body(new ByteArrayResource(dbFile.getData())); */
     }
-
-   /*  @GetMapping("/materiels/{id}/imagemateriel")
-    public ResponseEntity<Resource> downloadFile(@PathVariable(value="id") int id) {
+ */
+   @GetMapping("/materiels/{id}/imagemateriel")
+   public ResponseEntity<Resource> downloadFile(@PathVariable(value="id") int id) {
         // Load file from database
         DBFile dbFile = dbFileStorageService.getFile(id);
         return ResponseEntity.ok()
         .contentType(MediaType.parseMediaType(dbFile.getFileType()))
         .header(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\"" + dbFile.getFileName() + "\"")
         .body(new ByteArrayResource(dbFile.getData()));
-    } */
+    }
+
+    @GetMapping("/materiels/{id}/imagedetails")
+    public DBFile getImageDetails(@PathVariable(value="id") int id){
+        Materiel materiel = materielRepository.findById(id).get();
+        DBFile dbf = dbFileRepository.findById(materiel.getFileId()).get();
+        return dbf;
+    }
 }

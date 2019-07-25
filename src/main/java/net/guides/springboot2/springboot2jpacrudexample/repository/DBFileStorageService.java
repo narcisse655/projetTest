@@ -9,6 +9,7 @@ import javax.transaction.Transactional;
 
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +28,7 @@ public class DBFileStorageService {
     @Autowired
     private MaterielRepository materielRepository;
 
-    @Transactional
+   /*  @Transactional
     public DBFile storeFile(int materielId, MultipartFile file) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
@@ -43,6 +44,25 @@ public class DBFileStorageService {
             Materiel materiel = materielRepository.findById(materielId).get();
             materiel.setFileId(dbf.getId());
             materielRepository.save(materiel);
+            return dbf;
+        } catch (IOException ex) {
+            throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
+        }
+    } */
+
+    
+    public DBFile storeFile(MultipartFile file) {
+        // Normalize file name
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+
+        try {
+            // Check if the file's name contains invalid characters
+            if(fileName.contains("..")) {
+                throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
+            }
+
+            DBFile dbFile = new DBFile(fileName, file.getContentType(), file.getBytes());
+            DBFile dbf = dbFileRepository.save(dbFile);
             return dbf;
         } catch (IOException ex) {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
@@ -101,7 +121,7 @@ public class DBFileStorageService {
 
     }*/
 
-    public void renderImageFromDB(int id, HttpServletResponse response){
+    /* public void renderImageFromDB(int id, HttpServletResponse response){
 
         Materiel materiel = null;
         try {
@@ -123,7 +143,8 @@ public class DBFileStorageService {
 				byteArray[i++] = wrappedByte;
             }
             
-			response.setContentType(dbf.getFileType());
+            response.setContentType(dbf.getFileType());
+            response.setHeader(HttpHeaders.CONTENT_DISPOSITION,"attachment; filename=\"" + dbf.getFileName() + "\"");
 			InputStream is = new ByteArrayInputStream(byteArray);
 			try {
                 IOUtils.copy(is, response.getOutputStream());
@@ -134,5 +155,5 @@ public class DBFileStorageService {
 
 		}
 
-	} 
+	}  */
 }

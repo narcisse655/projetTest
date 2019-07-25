@@ -4,6 +4,8 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name = "files")
 public class DBFile {
@@ -16,6 +18,7 @@ public class DBFile {
 
     private String fileType;
 
+    @JsonIgnore
     @Lob
     private byte[] data;
 

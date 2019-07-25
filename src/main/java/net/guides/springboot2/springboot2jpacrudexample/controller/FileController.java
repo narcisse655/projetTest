@@ -45,7 +45,7 @@ public class FileController {
                 file.getContentType(), file.getSize());
     } */
 
-    @PostMapping("/uploadFile")
+    /* @PostMapping("/uploadFile")
     public UploadFileResponse uploadFile(@PathVariable(value="materielId") int materielId, 
     @RequestParam("file") MultipartFile file) {
         DBFile dbFile = DBFileStorageService.storeFile(materielId, file);
@@ -57,7 +57,7 @@ public class FileController {
 
         return new UploadFileResponse(dbFile.getFileName(), fileDownloadUri,
                 file.getContentType(), file.getSize());
-    }
+    } */
 
     /* @PostMapping("/uploadMultipleFiles")
     public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
