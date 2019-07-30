@@ -43,8 +43,12 @@ public class Materiel implements Serializable {
     @Column(name = "pu_materiel")
     private Double puMateriel;
 
-    @Column(name="file_id")
-    private String fileId;
+    @Size(max = 50)
+    @Column(name="file_name")
+    private String fileName;
+
+    @Column(name="description")
+    private String description;
 
     /* @JsonIgnore
     @Lob
@@ -106,14 +110,23 @@ public class Materiel implements Serializable {
         this.puMateriel = puMateriel;
     }
 
-    public String getFileId() {
-        return fileId;
+    public String getFileName() {
+        return fileName;
     }
 
-    public void setFileId(String fileId) {
-        this.fileId = fileId;
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    
     
 
     

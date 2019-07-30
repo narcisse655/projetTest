@@ -39,14 +39,15 @@ public class Role implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 30)
-    @Column(name = "nom_role")
-    private String nomRole;
+    @Column(name = "role_name")
+    private String roleName;
     
-    @JoinTable(name = "users_role", joinColumns = {
+   /*  @JoinTable(name = "users_role", joinColumns = {
         @JoinColumn(name = "id_role", referencedColumnName = "id_role")}, inverseJoinColumns = {
         @JoinColumn(name = "id_users", referencedColumnName = "id_users")})
     @ManyToMany
-    private List<Users> usersList;
+    private List<Users> usersList; */
+
 
     public Role() {
     }
@@ -55,9 +56,9 @@ public class Role implements Serializable {
         this.idRole = idRole;
     }
 
-    public Role(Integer idRole, String nomRole) {
+    public Role(Integer idRole, String roleName) {
         this.idRole = idRole;
-        this.nomRole = nomRole;
+        this.roleName = roleName;
     }
 
     public Integer getIdRole() {
@@ -68,21 +69,21 @@ public class Role implements Serializable {
         this.idRole = idRole;
     }
 
-    public String getNomRole() {
-        return nomRole;
+    public String getRoleName() {
+        return roleName;
     }
 
-    public void setNomRole(String nomRole) {
-        this.nomRole = nomRole;
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
-    @XmlTransient
+    /* @XmlTransient
     public List<Users> getUsersList() {
         return usersList;
     }
 
     public void setUsersList(List<Users> usersList) {
         this.usersList = usersList;
-    }
+    } */
 
 }
