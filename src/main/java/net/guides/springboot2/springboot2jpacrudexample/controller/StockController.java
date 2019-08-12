@@ -23,7 +23,8 @@ import net.guides.springboot2.springboot2jpacrudexample.repository.AgenceReposit
 import net.guides.springboot2.springboot2jpacrudexample.repository.MaterielRepository;
 import net.guides.springboot2.springboot2jpacrudexample.repository.StockRepository;
 
-@RestController @CrossOrigin(origins = "http://localhost:4200")
+@RestController 
+//@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/v1")
 public class StockController {
     

@@ -3,6 +3,7 @@ package net.guides.springboot2.springboot2jpacrudexample.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,7 +38,7 @@ public class AccountController {
     }
 
     @PostMapping("/users/role/add")
-    public Users addRoleToUsers(@RequestParam(value ="username") String username,
+    public Users addRoleToUsers(@RequestParam(value ="u") String username,
     @RequestParam(value ="roleName") String roleName) {
         Users users = accountService.findUsersByUsername(username);
         for(Role r : users.getRoleList()){
@@ -49,11 +50,17 @@ public class AccountController {
     }
 
     @PostMapping("users/role/move")
-    public Users moveRoleToUsers(@RequestParam(value ="username") String username, 
+    public Users moveRoleToUsers(@RequestParam(value ="u") String username, 
     @RequestParam(value ="roleName") String roleName){
         Users users = accountService.findUsersByUsername(username);
         accountService.moveRoleToUsers(username, roleName);
         return users;
     }
+
+    @GetMapping("/users")
+    public Users getUsers(@RequestParam(value="u") String username){
+        return accountService.findUsersByUsername(username);
+    }
+    
     
 }

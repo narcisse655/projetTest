@@ -23,7 +23,8 @@ import net.guides.springboot2.springboot2jpacrudexample.exception.ResourceNotFou
 import net.guides.springboot2.springboot2jpacrudexample.model.*;
 import net.guides.springboot2.springboot2jpacrudexample.repository.*;
 
-@RestController @CrossOrigin(origins = "http://localhost:4200")
+@RestController 
+//@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/v1")
 public class LocationController {
     

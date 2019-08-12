@@ -102,4 +102,33 @@ public class FileStorageService {
         }
         return new ResponseEntity<List<String>>(files, HttpStatus.OK);
     }
+
+    public ResponseEntity<List<String>> getFile(String fileName){
+        List<String> files = new ArrayList<>();
+        String filePath = this.fileStorageLocation.toString();
+        File fileFolder = new File(filePath);
+        if (fileFolder != null){
+            for(final File file: fileFolder.listFiles()){
+                if (file.getName().equals(fileName)){
+                    if (!file.isDirectory()){
+                        String encoderBase64 = null;
+                        try{
+                            String extension =  StringUtils.getFilenameExtension(file.getName());
+                            FileInputStream fileInputStream = new FileInputStream(file);
+                            byte[] bytes = new byte[(int)file.length()];
+                            fileInputStream.read(bytes);
+                            encoderBase64 = Base64.getEncoder().encodeToString(bytes);
+                            files.add("data:image/"+extension+";base64,"+encoderBase64);
+                            fileInputStream.close();
+                        }catch(Exception e){
+    
+                        }
+    
+                    }
+                }
+                
+            }
+        }
+        return new ResponseEntity<List<String>>(files, HttpStatus.OK);
+    }
 }

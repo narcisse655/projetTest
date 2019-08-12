@@ -49,7 +49,8 @@ public class FileController {
                 .map(file -> uploadFile(file))
                 .collect(Collectors.toList());
     }
-
+    
+    
     @GetMapping("/downloadFile/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
         // Load file as Resource
@@ -77,6 +78,11 @@ public class FileController {
     @GetMapping("/files")
     public ResponseEntity<List<String>> getFiles(){
         return fileStorageService.getFiles();
+    }
+
+    @GetMapping("/file/{fileName:.+}")
+    public ResponseEntity<List<String>> getFile(@PathVariable(value ="fileName") String fileName){
+        return fileStorageService.getFile(fileName);
     }
     
 
