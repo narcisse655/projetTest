@@ -24,7 +24,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class FileStorageService {
@@ -77,6 +79,19 @@ public class FileStorageService {
         }
     }
 
+    public void deleteFile(String fileName){
+        String filePath = this.fileStorageLocation.toString();
+        File fileFolder = new File(filePath);
+        if (fileFolder != null){
+            for (File file: fileFolder.listFiles()){
+                if (!file.isDirectory() && file.getName() == fileName){
+                    file.delete();
+                }
+            }
+        }
+    }
+
+    //Unused
     public ResponseEntity<List<String>> getFiles(){
         List<String> files = new ArrayList<>();
         String filePath = this.fileStorageLocation.toString();
@@ -103,6 +118,7 @@ public class FileStorageService {
         return new ResponseEntity<List<String>>(files, HttpStatus.OK);
     }
 
+    //Unused
     public ResponseEntity<List<String>> getFile(String fileName){
         List<String> files = new ArrayList<>();
         String filePath = this.fileStorageLocation.toString();
@@ -131,4 +147,6 @@ public class FileStorageService {
         }
         return new ResponseEntity<List<String>>(files, HttpStatus.OK);
     }
+
+    
 }

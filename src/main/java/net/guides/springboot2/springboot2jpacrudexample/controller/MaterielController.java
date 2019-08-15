@@ -73,7 +73,7 @@ public class MaterielController {
 
         materielRepository.delete(materiel);
         Map<String, Boolean> response = new HashMap<>();
-        response.put("deleted", Boolean.TRUE);
+        response.put("Materiel deleted", Boolean.TRUE);
         return response;
     }
 

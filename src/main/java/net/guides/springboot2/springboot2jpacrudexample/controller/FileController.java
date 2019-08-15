@@ -17,7 +17,9 @@ import net.guides.springboot2.springboot2jpacrudexample.service.FileStorageServi
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
@@ -33,24 +35,17 @@ public class FileController {
     public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file) {
         String fileName = fileStorageService.storeFile(file);
 
-        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/v1/downloadFile/")
-                .path(fileName)
-                .toUriString();
+        String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/v1/downloadFile/")
+                .path(fileName).toUriString();
 
-        return new UploadFileResponse(fileName, fileDownloadUri,
-                file.getContentType(), file.getSize());
+        return new UploadFileResponse(fileName, fileDownloadUri, file.getContentType(), file.getSize());
     }
 
     @PostMapping("/uploadMultipleFiles")
     public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-        return Arrays.asList(files)
-                .stream()
-                .map(file -> uploadFile(file))
-                .collect(Collectors.toList());
+        return Arrays.asList(files).stream().map(file -> uploadFile(file)).collect(Collectors.toList());
     }
-    
-    
+
     @GetMapping("/downloadFile/{fileName:.+}")
     public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
         // Load file as Resource
@@ -65,25 +60,33 @@ public class FileController {
         }
 
         // Fallback to the default content type if type could not be determined
-        if(contentType == null) {
+        if (contentType == null) {
             contentType = "application/octet-stream";
         }
 
-        return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
                 .body(resource);
     }
 
+    @DeleteMapping("/file/delete/{fileName:.+}")
+    public Map<String, Boolean> deleteFile(@PathVariable(value = "fileName") String fileName) {
+        fileStorageService.deleteFile(fileName);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("File deleted", Boolean.TRUE);
+        return response;
+    }
+
+    // Unused
     @GetMapping("/files")
-    public ResponseEntity<List<String>> getFiles(){
+    public ResponseEntity<List<String>> getFiles() {
         return fileStorageService.getFiles();
     }
 
+    // Unused
     @GetMapping("/file/{fileName:.+}")
-    public ResponseEntity<List<String>> getFile(@PathVariable(value ="fileName") String fileName){
+    public ResponseEntity<List<String>> getFile(@PathVariable(value = "fileName") String fileName) {
         return fileStorageService.getFile(fileName);
     }
-    
 
 }
