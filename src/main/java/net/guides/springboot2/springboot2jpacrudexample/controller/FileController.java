@@ -43,7 +43,11 @@ public class FileController {
 
     @PostMapping("/uploadMultipleFiles")
     public List<UploadFileResponse> uploadMultipleFiles(@RequestParam("files") MultipartFile[] files) {
-        return Arrays.asList(files).stream().map(file -> uploadFile(file)).collect(Collectors.toList());
+        return Arrays
+                .asList(files)
+                .stream()
+                .map(file -> uploadFile(file))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/downloadFile/{fileName:.+}")
@@ -84,9 +88,9 @@ public class FileController {
     }
 
     // Unused
-    @GetMapping("/file/{fileName:.+}")
+    /*@GetMapping("/file/{fileName:.+}")
     public ResponseEntity<List<String>> getFile(@PathVariable(value = "fileName") String fileName) {
         return fileStorageService.getFile(fileName);
-    }
+    }*/
 
 }

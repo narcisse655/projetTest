@@ -49,6 +49,8 @@ public class Users implements Serializable {
     @Size(min = 1, max = 100)
     @Column(name = "password")
     private String password;
+
+    private boolean active;
     
     /* @ManyToMany(mappedBy = "usersList", fetch = FetchType.EAGER)//EAGER veut dire que chaque fois que tu vas charger un users charge aussi ses roles
     private List<Role> roleList = new ArrayList<>(); */
@@ -110,5 +112,12 @@ public class Users implements Serializable {
     public void setRoleList(List<Role> roleList) {
         this.roleList = roleList;
     }
-    
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }

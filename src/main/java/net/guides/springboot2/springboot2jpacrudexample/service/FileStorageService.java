@@ -1,5 +1,7 @@
 package net.guides.springboot2.springboot2jpacrudexample.service;
 
+import net.guides.springboot2.springboot2jpacrudexample.model.Materiel;
+import net.guides.springboot2.springboot2jpacrudexample.repository.MaterielRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -34,6 +36,9 @@ public class FileStorageService {
     private final Path fileStorageLocation;
 
     @Autowired
+    private MaterielRepository materielRepository;
+
+    @Autowired
     public FileStorageService(FileStorageProperties fileStorageProperties) {
         this.fileStorageLocation = Paths.get(fileStorageProperties.getUploadDir())
                 .toAbsolutePath().normalize();
@@ -48,13 +53,11 @@ public class FileStorageService {
     public String storeFile(MultipartFile file) {
         // Normalize file name
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-
         try {
             // Check if the file's name contains invalid characters
             if(fileName.contains("..")) {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
-
             // Copy file to the target location (Replacing existing file with the same name)
             Path targetLocation = this.fileStorageLocation.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
@@ -64,6 +67,7 @@ public class FileStorageService {
             throw new FileStorageException("Could not store file " + fileName + ". Please try again!", ex);
         }
     }
+
 
     public Resource loadFileAsResource(String fileName) {
         try {
@@ -79,16 +83,42 @@ public class FileStorageService {
         }
     }
 
+    /*public void deleteFile(String fileName){
+        String filePath = this.fileStorageLocation.toString();
+        File fileFolder = new File(filePath);
+        if (fileFolder != null){
+            for (File file: fileFolder.listFiles()){
+                if (!file.isDirectory()){
+                    if (file.getName().equals(fileName)){
+                        file.delete();
+                    }
+                }
+            }
+        }
+    }*/
+
     public void deleteFile(String fileName){
         String filePath = this.fileStorageLocation.toString();
         File fileFolder = new File(filePath);
         if (fileFolder != null){
             for (File file: fileFolder.listFiles()){
-                if (!file.isDirectory() && file.getName() == fileName){
-                    file.delete();
+                if (!file.isDirectory()){
+                    if (file.getName().equals(fileName)){
+                        if (getListMaterielsByFileName(fileName).size() <= 1){
+                            file.delete();
+                        }
+                    }
                 }
             }
         }
+    }
+
+
+
+    public List<Materiel> getListMaterielsByFileName(String fileName){
+        List<Materiel> materiels = new ArrayList<>();
+        materiels = materielRepository.findByFileName(fileName);
+        return materiels;
     }
 
     //Unused
@@ -113,36 +143,6 @@ public class FileStorageService {
                     }
 
                 }
-            }
-        }
-        return new ResponseEntity<List<String>>(files, HttpStatus.OK);
-    }
-
-    //Unused
-    public ResponseEntity<List<String>> getFile(String fileName){
-        List<String> files = new ArrayList<>();
-        String filePath = this.fileStorageLocation.toString();
-        File fileFolder = new File(filePath);
-        if (fileFolder != null){
-            for(final File file: fileFolder.listFiles()){
-                if (file.getName().equals(fileName)){
-                    if (!file.isDirectory()){
-                        String encoderBase64 = null;
-                        try{
-                            String extension =  StringUtils.getFilenameExtension(file.getName());
-                            FileInputStream fileInputStream = new FileInputStream(file);
-                            byte[] bytes = new byte[(int)file.length()];
-                            fileInputStream.read(bytes);
-                            encoderBase64 = Base64.getEncoder().encodeToString(bytes);
-                            files.add("data:image/"+extension+";base64,"+encoderBase64);
-                            fileInputStream.close();
-                        }catch(Exception e){
-    
-                        }
-    
-                    }
-                }
-                
             }
         }
         return new ResponseEntity<List<String>>(files, HttpStatus.OK);

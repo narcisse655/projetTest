@@ -5,6 +5,7 @@ public class RegisterForm {
     private String username;
     private String password;
     private String repassword;
+    private boolean active;
 
     public String getUsername() {
         return username;
@@ -30,6 +31,11 @@ public class RegisterForm {
         this.repassword = repassword;
     }
 
-    
+    public boolean isActive() {
+        return active;
+    }
 
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }

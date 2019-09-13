@@ -1,6 +1,9 @@
 package net.guides.springboot2.springboot2jpacrudexample.service;
 
+import net.guides.springboot2.springboot2jpacrudexample.model.Materiel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import net.guides.springboot2.springboot2jpacrudexample.model.Role;
 import net.guides.springboot2.springboot2jpacrudexample.model.Users;
 import net.guides.springboot2.springboot2jpacrudexample.repository.*;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -57,5 +63,10 @@ public class AccountServiceImpl implements AccountService{
         if (users.getRoleList().contains(role)) 
             users.getRoleList().remove(role);
     }
-    
+
+    @Override
+    public Page<Users> getUsers(int page){
+        return usersRepository.findAll(new PageRequest(page, 5));
+    }
+
 }

@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();/*Ce n'est plus la peine de use ce sychronize token */
         //http.formLogin();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);//désactiver la session
-        http.authorizeRequests().antMatchers("/login/**", "/api/v1/register/**").permitAll();
+        http.authorizeRequests().antMatchers("/login/**", "/api/v1/register/**", "/api/v1/users/{username}/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/v1/materiels/{id}/**").hasAuthority("ADMIN");
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(new JWTAuthenticationFilter(authenticationManager()));

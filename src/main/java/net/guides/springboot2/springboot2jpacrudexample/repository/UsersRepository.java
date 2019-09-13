@@ -8,6 +8,8 @@ import net.guides.springboot2.springboot2jpacrudexample.model.*;
 
 @Repository
 public interface UsersRepository extends JpaRepository<Users, Integer>{
-    @Query("SELECT u from Users u where u.username=:username")
-    public Users findByUsername(@Param("username") String username);
+    /*@Query("SELECT u from Users u where u.username=:username")
+    public Users findByUsername(@Param("username") String username);*/
+
+    public Users findByUsername(String username);
 }
